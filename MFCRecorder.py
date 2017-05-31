@@ -24,6 +24,7 @@ def getOnlineModels():
                 models = model.split()
                 for theModel in models:
                     wanted.append(int(theModel))
+        f.close()
 
         def query():
             try:
@@ -43,7 +44,6 @@ def getOnlineModels():
         loop.run_forever()
     except:
         pass
-
 
 def startRecording(model):
     try:
@@ -66,8 +66,10 @@ def startRecording(model):
                     data = fd.read(1024)
                     f.write(data)
                 except:
+                    f.close()
                     recording.remove(model['uid'])
                     recordingNames.remove(model['nm'])
+                    return
 
         if model in recording:
             recording.remove(model['uid'])
@@ -92,7 +94,7 @@ if __name__ == '__main__':
         print()
         print("Disconnected:")
         print("Waiting for next check")
-        print("_________________________________________________________")
+        print("____________________Recording Status_____________________")
         for i in range(20, 0, -1):
             sys.stdout.write("\033[K")
             print("{} model(s) are being recorded. Next check in {} seconds".format(len(recording), i))
