@@ -15,30 +15,35 @@ recording = []
 recordingNames = []
 
 def getOnlineModels():
-    wanted = []
-    loop = asyncio.get_event_loop()
-    client = Client(loop)
-    with open(wishlist) as f:
-        for model in f:
-            models = model.split()
-            for theModel in models:
-                wanted.append(int(theModel))
+    try:
+        wanted = []
+        loop = asyncio.get_event_loop()
+        client = Client(loop)
+        with open(wishlist) as f:
+            for model in f:
+                models = model.split()
+                for theModel in models:
+                    wanted.append(int(theModel))
 
-    def query():
-        try:
-            MFConline = Model.find_models(lambda m: m.bestsession["vs"] == STATE.FreeChat.value)
-            client.disconnect()
-            for model in MFConline:
-                if model.bestsession['uid'] in wanted and model.bestsession['uid'] not in recording:
-                    thread = threading.Thread(target=startRecording, args=(model.bestsession,))
-                    thread.start()
+        def query():
+            try:
+                MFConline = Model.find_models(lambda m: m.bestsession["vs"] == STATE.FreeChat.value)
+                client.disconnect()
+                for model in MFConline:
+                    if model.bestsession['uid'] in wanted and model.bestsession['uid'] not in recording:
+                        thread = threading.Thread(target=startRecording, args=(model.bestsession,))
+                        thread.start()
 
-        except:
-            pass
+            except:
+                client.disconnect()
+                pass
 
-    client.on(FCTYPE.CLIENT_MODELSLOADED, query)
-    loop.run_until_complete(client.connect())
-    loop.run_forever()
+        client.on(FCTYPE.CLIENT_MODELSLOADED, query)
+        loop.run_until_complete(client.connect())
+        loop.run_forever()
+    except:
+        pass
+
 
 def startRecording(model):
     try:
