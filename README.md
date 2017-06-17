@@ -12,7 +12,7 @@ and mfcauto.py (https://github.com/ZombieAlex/mfcauto.py)
 
 to install required modules, run:
 ```
-python3.5 -m pip install livesteramer
+python3.5 -m pip install livestreamer
 python3.5 -m pip install --upgrade git+https://github.com/ZombieAlex/mfcauto.py@master
 ```
 
